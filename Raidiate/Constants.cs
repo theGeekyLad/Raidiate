@@ -10,6 +10,5 @@ namespace Raidiate
     {
         public const string LOGS_DIR_PATH = "logs";
         public const string SCRIPT_PATH = LOGS_DIR_PATH + "/script.txt";
-        //lol
     }
 }
