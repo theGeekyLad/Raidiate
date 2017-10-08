@@ -10,7 +10,5 @@ namespace Raidiate
     {
         public const string LOGS_DIR_PATH = "logs";
         public const string SCRIPT_PATH = LOGS_DIR_PATH + "/script.txt";
-        public const string MOHIT = "mohit";
-        public const string RAHUL = "rahul";
     }
 }
