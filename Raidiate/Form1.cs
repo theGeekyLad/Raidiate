@@ -24,47 +24,60 @@ namespace Raidiate
 
             // populating disk + partition + volume
             diskComboBox.DataSource = disk.DiskNames;
+            partitionComboBox.DataSource = disk.PartitionNames;
             
+        }
+
+        private void diskComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            partitionComboBox.DataSource = disk.GetPartitionNames(Constants.SELECTED_DISK = diskComboBox.SelectedIndex);
+        }
+
+        private void rescanButton_Click(object sender, EventArgs e)
+        {
+            disk = new Disk();
+            diskComboBox.DataSource = disk.DiskNames;
+            partitionComboBox.DataSource = disk.PartitionNames;
         }
 
         //private void button1_Click(object sender, EventArgs e)
         //{
 
-            /*
-            string command = textBox1.Text;
-            string exe = command.Substring(0, command.IndexOf(' '));
-            string args = command.Substring(command.IndexOf(' ')+1);
+        /*
+        string command = textBox1.Text;
+        string exe = command.Substring(0, command.IndexOf(' '));
+        string args = command.Substring(command.IndexOf(' ')+1);
 
-            Process process = new Process();
-            try
+        Process process = new Process();
+        try
+        {
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.FileName = exe;
+            process.StartInfo.Arguments = args;
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.CreateNoWindow = false;
+            process.StartInfo.RedirectStandardOutput = true;
+
+            process.Start();
+            process.WaitForExit();
+
+            StreamReader streamReader = process.StandardOutput;
+
+            string op = "", t; ;
+            while ((t = streamReader.ReadLine()) != null)
             {
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.FileName = exe;
-                process.StartInfo.Arguments = args;
-                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                process.StartInfo.CreateNoWindow = false;
-                process.StartInfo.RedirectStandardOutput = true;
-
-                process.Start();
-                process.WaitForExit();
-
-                StreamReader streamReader = process.StandardOutput;
-
-                string op = "", t; ;
-                while ((t = streamReader.ReadLine()) != null)
-                {
-                    op += t + "\n";
-                }
-
-                richTextBox1.Text = op;
-
+                op += t + "\n";
             }
-            catch (Exception ex)
-            {
-                textBox1.Text = ex.Message;
-                //Console.ReadKey();
-            }
-            */
+
+            richTextBox1.Text = op;
+
+        }
+        catch (Exception ex)
+        {
+            textBox1.Text = ex.Message;
+            //Console.ReadKey();
+        }
+        */
 
         //}
     }

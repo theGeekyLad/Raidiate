@@ -32,7 +32,6 @@
             System.Windows.Forms.Button eraseButton;
             System.Windows.Forms.Button partitionButton;
             System.Windows.Forms.Button diskButton;
-            System.Windows.Forms.Button volumeButton;
             System.Windows.Forms.Button filesystemButton;
             System.Windows.Forms.Button removeButton;
             System.Windows.Forms.Button assignButton;
@@ -44,10 +43,8 @@
             this.diskInfoGroupBox = new System.Windows.Forms.GroupBox();
             this.diskComboBox = new System.Windows.Forms.ComboBox();
             this.diskSelectionGroupBox = new System.Windows.Forms.GroupBox();
-            this.volumeLabel = new System.Windows.Forms.Label();
             this.partitionLabel = new System.Windows.Forms.Label();
             this.diskLabel = new System.Windows.Forms.Label();
-            this.volumeComboBox = new System.Windows.Forms.ComboBox();
             this.partitionComboBox = new System.Windows.Forms.ComboBox();
             this.driveLetterControlsGroupBox = new System.Windows.Forms.GroupBox();
             this.diskMergeControlsGroupBox = new System.Windows.Forms.GroupBox();
@@ -57,7 +54,6 @@
             eraseButton = new System.Windows.Forms.Button();
             partitionButton = new System.Windows.Forms.Button();
             diskButton = new System.Windows.Forms.Button();
-            volumeButton = new System.Windows.Forms.Button();
             filesystemButton = new System.Windows.Forms.Button();
             removeButton = new System.Windows.Forms.Button();
             assignButton = new System.Windows.Forms.Button();
@@ -95,7 +91,7 @@
             // partitionButton
             // 
             partitionButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            partitionButton.Location = new System.Drawing.Point(55, 72);
+            partitionButton.Location = new System.Drawing.Point(55, 64);
             partitionButton.Name = "partitionButton";
             partitionButton.Size = new System.Drawing.Size(125, 23);
             partitionButton.TabIndex = 0;
@@ -105,27 +101,17 @@
             // diskButton
             // 
             diskButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            diskButton.Location = new System.Drawing.Point(55, 43);
+            diskButton.Location = new System.Drawing.Point(55, 35);
             diskButton.Name = "diskButton";
             diskButton.Size = new System.Drawing.Size(125, 23);
             diskButton.TabIndex = 0;
             diskButton.Text = "Disk";
             diskButton.UseVisualStyleBackColor = true;
             // 
-            // volumeButton
-            // 
-            volumeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            volumeButton.Location = new System.Drawing.Point(55, 101);
-            volumeButton.Name = "volumeButton";
-            volumeButton.Size = new System.Drawing.Size(125, 23);
-            volumeButton.TabIndex = 0;
-            volumeButton.Text = "Volume";
-            volumeButton.UseVisualStyleBackColor = true;
-            // 
             // filesystemButton
             // 
             filesystemButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            filesystemButton.Location = new System.Drawing.Point(55, 129);
+            filesystemButton.Location = new System.Drawing.Point(55, 93);
             filesystemButton.Name = "filesystemButton";
             filesystemButton.Size = new System.Drawing.Size(125, 23);
             filesystemButton.TabIndex = 0;
@@ -161,6 +147,7 @@
             rescanButton.TabIndex = 0;
             rescanButton.Text = "Rescan";
             rescanButton.UseVisualStyleBackColor = true;
+            rescanButton.Click += new System.EventHandler(this.rescanButton_Click);
             // 
             // partitionCreateButton
             // 
@@ -207,12 +194,11 @@
             // diskInfoGroupBox
             // 
             this.diskInfoGroupBox.Controls.Add(filesystemButton);
-            this.diskInfoGroupBox.Controls.Add(volumeButton);
             this.diskInfoGroupBox.Controls.Add(partitionButton);
             this.diskInfoGroupBox.Controls.Add(diskButton);
             this.diskInfoGroupBox.Location = new System.Drawing.Point(17, 243);
             this.diskInfoGroupBox.Name = "diskInfoGroupBox";
-            this.diskInfoGroupBox.Size = new System.Drawing.Size(234, 190);
+            this.diskInfoGroupBox.Size = new System.Drawing.Size(234, 141);
             this.diskInfoGroupBox.TabIndex = 0;
             this.diskInfoGroupBox.TabStop = false;
             this.diskInfoGroupBox.Text = "Disk Information";
@@ -225,14 +211,13 @@
             this.diskComboBox.Name = "diskComboBox";
             this.diskComboBox.Size = new System.Drawing.Size(309, 24);
             this.diskComboBox.TabIndex = 1;
+            this.diskComboBox.SelectedIndexChanged += new System.EventHandler(this.diskComboBox_SelectedIndexChanged);
             // 
             // diskSelectionGroupBox
             // 
-            this.diskSelectionGroupBox.Controls.Add(this.volumeLabel);
             this.diskSelectionGroupBox.Controls.Add(this.partitionLabel);
             this.diskSelectionGroupBox.Controls.Add(this.diskLabel);
             this.diskSelectionGroupBox.Controls.Add(rescanButton);
-            this.diskSelectionGroupBox.Controls.Add(this.volumeComboBox);
             this.diskSelectionGroupBox.Controls.Add(this.partitionComboBox);
             this.diskSelectionGroupBox.Controls.Add(this.diskComboBox);
             this.diskSelectionGroupBox.Location = new System.Drawing.Point(17, 13);
@@ -241,16 +226,6 @@
             this.diskSelectionGroupBox.TabIndex = 2;
             this.diskSelectionGroupBox.TabStop = false;
             this.diskSelectionGroupBox.Text = "Disk Selection";
-            // 
-            // volumeLabel
-            // 
-            this.volumeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.volumeLabel.AutoSize = true;
-            this.volumeLabel.Location = new System.Drawing.Point(201, 95);
-            this.volumeLabel.Name = "volumeLabel";
-            this.volumeLabel.Size = new System.Drawing.Size(55, 17);
-            this.volumeLabel.TabIndex = 0;
-            this.volumeLabel.Text = "Volume";
             // 
             // partitionLabel
             // 
@@ -271,15 +246,6 @@
             this.diskLabel.Size = new System.Drawing.Size(35, 17);
             this.diskLabel.TabIndex = 0;
             this.diskLabel.Text = "Disk";
-            // 
-            // volumeComboBox
-            // 
-            this.volumeComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.volumeComboBox.FormattingEnabled = true;
-            this.volumeComboBox.Location = new System.Drawing.Point(204, 119);
-            this.volumeComboBox.Name = "volumeComboBox";
-            this.volumeComboBox.Size = new System.Drawing.Size(121, 24);
-            this.volumeComboBox.TabIndex = 1;
             // 
             // partitionComboBox
             // 
@@ -307,7 +273,7 @@
             this.diskMergeControlsGroupBox.Controls.Add(stripedButton);
             this.diskMergeControlsGroupBox.Controls.Add(this.unequallySizedLabel);
             this.diskMergeControlsGroupBox.Controls.Add(this.equallySizedLabel);
-            this.diskMergeControlsGroupBox.Location = new System.Drawing.Point(17, 439);
+            this.diskMergeControlsGroupBox.Location = new System.Drawing.Point(17, 390);
             this.diskMergeControlsGroupBox.Name = "diskMergeControlsGroupBox";
             this.diskMergeControlsGroupBox.Size = new System.Drawing.Size(234, 163);
             this.diskMergeControlsGroupBox.TabIndex = 0;
@@ -340,7 +306,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(505, 618);
+            this.ClientSize = new System.Drawing.Size(505, 574);
             this.Controls.Add(this.diskSelectionGroupBox);
             this.Controls.Add(this.diskInfoGroupBox);
             this.Controls.Add(this.diskMergeControlsGroupBox);
@@ -369,9 +335,7 @@
         private System.Windows.Forms.ComboBox diskComboBox;
         private System.Windows.Forms.GroupBox diskSelectionGroupBox;
         private System.Windows.Forms.Label diskLabel;
-        private System.Windows.Forms.Label volumeLabel;
         private System.Windows.Forms.Label partitionLabel;
-        private System.Windows.Forms.ComboBox volumeComboBox;
         private System.Windows.Forms.ComboBox partitionComboBox;
         private System.Windows.Forms.GroupBox driveLetterControlsGroupBox;
         private System.Windows.Forms.GroupBox diskMergeControlsGroupBox;

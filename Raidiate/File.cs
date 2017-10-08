@@ -16,7 +16,7 @@ namespace Raidiate
             this.path = path;
         }
 
-        public bool write(string s)
+        public bool Write(string s)
         {            
             try
             {
@@ -32,7 +32,7 @@ namespace Raidiate
             return true;
         }
 
-        public string read()
+        public string Read()
         {
             try
             {

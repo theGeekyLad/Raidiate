@@ -13,36 +13,31 @@ namespace Raidiate
         string[] grepArr;
 
         // accessible fields
-        public int DiskCount;
         public string[] DiskNames;
+        public string[] PartitionNames;
 
         public Disk()
         {
-            // diskpart ~ list disk | getting disk count
-            grepArr = diskpart("list disk").Split('\n');
-            DiskCount = getDiskCount();
-
-            // diskpart ~ select disk X ~ detail disk
-            DiskNames = getDiskNames();
+            DiskNames = GetDiskNames();
+            PartitionNames = GetPartitionNames(0);
         }
 
-        void script(string cmd)
+        void Script(string cmd)
         {
             File file = new File(Constants.SCRIPT_PATH);
-            file.write(cmd);
+            file.Write(cmd);
         }
 
-        string diskpart(string cmd)
+        public string Diskpart(string cmd)
         {
-            script(cmd);
+            Script(cmd);
             Process process = new Process();
             try
             {
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.FileName = "diskpart";
                 process.StartInfo.Arguments = "/s "+Constants.SCRIPT_PATH;
-                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                process.StartInfo.CreateNoWindow = false;
+                process.StartInfo.CreateNoWindow = true;
                 process.StartInfo.RedirectStandardOutput = true;
 
                 process.Start();
@@ -56,6 +51,7 @@ namespace Raidiate
                     op += t + "\n";
                 }
 
+                grepArr = op.Split('\n');
                 return op;
 
             }
@@ -65,25 +61,63 @@ namespace Raidiate
             }
         }
 
-        int getDiskCount()
+        int GetDiskCount()
         {
+            Diskpart("list disk");
             int c = 0;
             for (int i = 0; i < grepArr.Length; i++)
                 if (grepArr[i].Trim().StartsWith("Disk"))
                     c++;
             c--;
-            new File(Constants.LOGS_DIR_PATH + "/disk-count.txt").write(c + ""); // debugging
+            Log("disk_count", c + "");
             return c;
         }
 
-        string[] getDiskNames()
+        int GetPartitionCount(int diskNo)
         {
-            string[] diskNames = new string[DiskCount];
-            for (int i = 0; i < DiskCount; i++)
+            Diskpart("select disk " + diskNo + "\nlist partition");
+            int c = 0;
+            for (int i = 0; i < grepArr.Length; i++)
+                if (grepArr[i].Trim().StartsWith("Partition"))
+                    c++;
+            c--;
+            Log("partition_count", c + "");
+            return c;
+        }
+
+        public string[] GetDiskNames()
+        {
+            int n = GetDiskCount();
+            string[] diskNames = new string[n];
+            for (int i = 0; i < n; i++)
             {
-                new File(Constants.LOGS_DIR_PATH + "/" + i + "th-disk-name.txt").write(diskNames[i] = diskpart("select disk " + i + "\ndetail disk").Split('\n')[8]);
+                Log(i + "th_disk_count", diskNames[i] = Diskpart("select disk " + i + "\ndetail disk").Split('\n')[8]);
             }
             return diskNames;
+        }
+
+        public string[] GetPartitionNames(int diskNo)
+        {
+            int n = GetPartitionCount(diskNo), k = 0;
+            string[] partitionNames = new string[n];
+            string t;
+
+            for (int i = 1; i <= n; i++)
+            {
+                string[] lines = Diskpart("select disk " + diskNo + "\n" +
+                    "select partition " + i + "\n" +
+                    "detail partition").Trim().Split('\n');
+                string line = lines[lines.Length - 1].Trim();                
+                Scanner scanner = new Scanner(line);
+                scanner.Next(); scanner.Next(); scanner.Next();
+                Log(i + "th_partition_name", partitionNames[k++] = ((t=scanner.Next()).Length == 1) ?t:"unassigned");
+            }
+            return partitionNames;
+        }
+
+        void Log(string fileName, string message)
+        {
+            new File(Constants.LOGS_DIR_PATH + "/" + fileName + ".txt").Write(message);
         }
     }
 }
