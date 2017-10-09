@@ -115,6 +115,50 @@ namespace Raidiate
             return partitionNames;
         }
 
+        public string GetDiskInfo(int diskNo = 0)
+        {
+            string op = Diskpart("select disk " + diskNo + "\n" +
+                    "detail disk").Trim();
+            string[] opArr = op.Split('\n');
+
+            op = "";
+            for (int i = 8; i <= opArr.Length - 46; i++)
+                op += opArr[i] + "\n";
+            op = op.Trim();
+            
+            return op;
+        }
+
+        public string GetPartitionInfo(int diskNo = 0, int partitionNo = 0)
+        {
+            string op = Diskpart("select disk " + diskNo + "\n" +
+                "select partition " + partitionNo + "\n" +
+                "detail partition").Trim();
+            string[] opArr = op.Split('\n');
+
+            op = "";
+            for (int i = 9; i < opArr.Length; i++)
+                op += opArr[i] + "\n";
+            op = op.Trim();
+
+            return op;
+        }
+
+        public string GetFSInfo(int diskNo = 0, int partitionNo = 0)
+        {
+            string op = Diskpart("select disk " + diskNo + "\n" +
+                "select partition " + partitionNo + "\n" +
+                "filesystem").Trim();
+            string[] opArr = op.Split('\n');
+
+            op = "";
+            for (int i = 9; i <= opArr.Length-46; i++)
+                op += opArr[i] + "\n";
+            op = op.Trim();
+
+            return op;
+        }
+
         void Log(string fileName, string message)
         {
             new File(Constants.LOGS_DIR_PATH + "/" + fileName + ".txt").Write(message);

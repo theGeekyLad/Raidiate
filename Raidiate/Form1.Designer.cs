@@ -97,6 +97,7 @@
             partitionButton.TabIndex = 0;
             partitionButton.Text = "Partition";
             partitionButton.UseVisualStyleBackColor = true;
+            partitionButton.Click += new System.EventHandler(this.partitionButton_Click);
             // 
             // diskButton
             // 
@@ -107,6 +108,7 @@
             diskButton.TabIndex = 0;
             diskButton.Text = "Disk";
             diskButton.UseVisualStyleBackColor = true;
+            diskButton.Click += new System.EventHandler(this.diskButton_Click);
             // 
             // filesystemButton
             // 
@@ -117,6 +119,7 @@
             filesystemButton.TabIndex = 0;
             filesystemButton.Text = "Filesystem";
             filesystemButton.UseVisualStyleBackColor = true;
+            filesystemButton.Click += new System.EventHandler(this.filesystemButton_Click);
             // 
             // removeButton
             // 

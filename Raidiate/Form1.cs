@@ -30,7 +30,7 @@ namespace Raidiate
 
         private void diskComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            partitionComboBox.DataSource = disk.GetPartitionNames(Constants.SELECTED_DISK = diskComboBox.SelectedIndex);
+            partitionComboBox.DataSource = disk.GetPartitionNames(diskComboBox.SelectedIndex);
         }
 
         private void rescanButton_Click(object sender, EventArgs e)
@@ -38,6 +38,24 @@ namespace Raidiate
             disk = new Disk();
             diskComboBox.DataSource = disk.DiskNames;
             partitionComboBox.DataSource = disk.PartitionNames;
+        }
+
+        //Disk Information
+        private void diskButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(disk.GetDiskInfo(diskComboBox.SelectedIndex), diskComboBox.SelectedValue.ToString());
+        }
+
+        private void partitionButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(disk.GetPartitionInfo(diskComboBox.SelectedIndex, partitionComboBox.SelectedIndex + 1),
+                diskComboBox.SelectedValue.ToString() + " - " + partitionComboBox.SelectedValue.ToString() + ":\\");
+        }
+
+        private void filesystemButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(disk.GetFSInfo(diskComboBox.SelectedIndex, partitionComboBox.SelectedIndex + 1),
+                diskComboBox.SelectedValue.ToString() + " - " + partitionComboBox.SelectedValue.ToString() + ":\\");
         }
 
         //private void button1_Click(object sender, EventArgs e)
