@@ -309,7 +309,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(505, 574);
+            this.ClientSize = new System.Drawing.Size(505, 568);
             this.Controls.Add(this.diskSelectionGroupBox);
             this.Controls.Add(this.diskInfoGroupBox);
             this.Controls.Add(this.diskMergeControlsGroupBox);
